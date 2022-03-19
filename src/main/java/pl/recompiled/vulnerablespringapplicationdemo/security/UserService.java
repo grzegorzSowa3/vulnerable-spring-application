@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.recompiled.vulnerablespringapplicationdemo.mail.MailService;
 
+import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
-    private final Random random = new Random();
+    private final Random random = new SecureRandom();
 
     public String createUser(CreateUserDto dto) {
         final String token = RandomStringUtils.random(48, 0, 0, true, true, null, this.random);
