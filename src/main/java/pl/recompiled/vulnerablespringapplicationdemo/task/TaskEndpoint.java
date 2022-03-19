@@ -41,7 +41,6 @@ public class TaskEndpoint {
 
     @GetMapping
     public List<String> searchTasks(@RequestParam String phrase) {
-        System.out.println(phrase);
         String query = "select title from task where title like '%" + phrase + "%'";
         List<String> result = new ArrayList<>();
         try {
