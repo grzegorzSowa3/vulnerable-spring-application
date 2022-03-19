@@ -2,16 +2,10 @@ package pl.recompiled.vulnerablespringapplicationdemo.task;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,18 +35,9 @@ public class TaskEndpoint {
 
     @GetMapping
     public List<String> searchTasks(@RequestParam String phrase) {
-        String query = "select title from task where title like '%" + phrase + "%'";
-        List<String> result = new ArrayList<>();
-        try {
-            Connection c = dataSource.getConnection();
-            ResultSet rs = c.createStatement().executeQuery(query);
-            while (rs.next()) {
-                result.add(rs.getString("title"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
+        return repository.findByTitleContaining(phrase).stream()
+                .map(Task::getTitle)
+                .collect(Collectors.toList());
     }
 }
 
